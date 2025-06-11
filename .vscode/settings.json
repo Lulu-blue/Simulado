@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "fila_pont.h": "c"
+        "fila_pont.h": "c",
+        "fila_vetor.h": "c"
     }
 }

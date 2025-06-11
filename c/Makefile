@@ -1,40 +1,43 @@
-CC       := gcc
-CFLAGS   := -Wall -Wextra -Werror -O3
-LDFLAGS  := -lm
-BUILD    := ./build
-OBJ_DIR  := $(BUILD)/objects
-APP_DIR  := $(BUILD)
-TARGET   := heap_sort_app
-INCLUDE  := -Iinclude/
-SRC      := $(wildcard src/*.c)  # Agora busca arquivos .c
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -O3 -Iinclude
+SRC_DIR = src
+BUILD_DIR = build
+OBJ_DIR = $(BUILD_DIR)/objects
+BIN_DIR = $(BUILD_DIR)
 
-OBJECTS  := $(SRC:src/%.c=$(OBJ_DIR)/%.o)
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+TARGET = $(BIN_DIR)/heap_sort_benchmark
 
-all: build $(APP_DIR)/$(TARGET) run
+DATA_DIR = data
+DATA_FILE = $(DATA_DIR)/ratings.csv
 
-$(OBJ_DIR)/%.o: src/%.c
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INCLUDE) -o $@ -c $<
+all: $(TARGET)
 
-$(APP_DIR)/$(TARGET): $(OBJECTS)
-	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $@ $(OBJECTS)
+$(TARGET): $(OBJS)
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(CFLAGS) $^ -o $@ -lm
 
-.PHONY: all build clean debug release run
-
-build:
-	@mkdir -p $(APP_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-debug: CFLAGS += -DDEBUG -g
-debug: all
+prepare-data:
+	@mkdir -p $(DATA_DIR)
+	@if [ ! -f $(DATA_FILE) ]; then \
+		echo "Arquivo ratings.csv não encontrado em $(DATA_DIR)/"; \
+		echo "Por favor, coloque o arquivo ratings.csv em um destes locais:"; \
+		echo "1. $(DATA_DIR)/ratings.csv"; \
+		echo "2. ./ratings.csv"; \
+		echo "3. ../data/ratings.csv"; \
+		exit 1; \
+	fi
 
-release: CFLAGS += -O3
-release: all
+run: $(TARGET) prepare-data
+	@echo "Executando benchmark..."
+	@./$(TARGET)
 
 clean:
-	-@rm -rvf $(OBJ_DIR)/*
-	-@rm -rvf $(APP_DIR)/*
+	rm -rf $(BUILD_DIR)
 
-run:
-	@./$(APP_DIR)/$(TARGET)
+.PHONY: all clean run prepare-data
