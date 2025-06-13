@@ -1,96 +1,87 @@
-
-public class FilaPonteiro
-{
-    private static class NoFila
-    {
+public class FilaPonteiro {
+    private class NoFila {
         int valor;
         NoFila prox;
+        NoFila(int v) { valor = v; }
     }
 
     private NoFila inicio;
     private NoFila fim;
     private int tamanho;
 
-    public FilaPonteiro() {inicializar();}
-
-    public void inicializar()
-    {
-        inicio = null;
-        fim = null;
+    public FilaPonteiro() {
+        inicio = fim = null;
         tamanho = 0;
     }
 
-    public boolean estaVazia() {return inicio == null;}
+    public boolean estaVazia() { return inicio == null; }
 
-    public void enfileirar(int valor)
-    {
-        NoFila novo = new NoFila();
-        novo.valor = valor;
-        novo.prox = null;
-
-        if (estaVazia()){inicio = novo;} 
-        else {fim.prox = novo;}
-
+    public void enfileirar(int valor) {
+        NoFila novo = new NoFila(valor);
+        if (estaVazia()) inicio = novo;
+        else fim.prox = novo;
         fim = novo;
         tamanho++;
     }
 
-    public int desenfileirar()
-    {
-        if (estaVazia())
-        {
-            System.out.println("Fila vazia!");
-            return -1;
-        }
-
+    public int desenfileirar() {
+        if (estaVazia()) throw new RuntimeException("Fila vazia!");
         int valor = inicio.valor;
         inicio = inicio.prox;
+        if (inicio == null) fim = null;
         tamanho--;
-
-        if (inicio == null) {fim = null;}
-
         return valor;
     }
 
-    public void heapSort()
-    {
+    public void heapSort() {
         if (tamanho <= 1) return;
 
         int[] temp = new int[tamanho];
-        int n = tamanho;
-
-        for (int i = 0; i < n; i++) {temp[i] = desenfileirar();}
-
-        for (int i = n / 2 - 1; i >= 0; i--) { heapify(temp, n, i);}
-
-        for (int i = n - 1; i > 0; i--)
-        {
-            int tempVal = temp[0];
-            temp[0] = temp[i];
-            temp[i] = tempVal;
-
-            heapify(temp, i, 0);
+        for (int i = 0; i < temp.length; i++) {
+            temp[i] = desenfileirar();
         }
 
-        for (int i = 0; i < n; i++) {enfileirar(temp[i]);}
+        heapSortArray(temp);
+
+        for (int val : temp) {
+            enfileirar(val);
+        }
     }
 
-    private void heapify(int[] arr, int n, int i)
-    {
-        int maior = i;
-        int esq = 2 * i + 1;
-        int dir = 2 * i + 2;
+    private void heapSortArray(int[] arr) {
+        int n = arr.length;
+        
+        // Build heap
+        for (int i = n/2 - 1; i >= 0; i--)
+            heapify(arr, n, i);
+        
+        // Extract elements
+        for (int i = n-1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            
+            heapify(arr, i, 0);
+        }
+    }
 
-        if (esq < n && arr[esq] > arr[maior]) {maior = esq;}
+    private void heapify(int[] arr, int n, int i) {
+        int largest = i;
+        int left = 2*i + 1;
+        int right = 2*i + 2;
 
-        if (dir < n && arr[dir] > arr[maior]) {maior = dir;}
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
 
-        if (maior != i)
-        {
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest != i) {
             int swap = arr[i];
-            arr[i] = arr[maior];
-            arr[maior] = swap;
-            heapify(arr, n, maior);
+            arr[i] = arr[largest];
+            arr[largest] = swap;
+
+            heapify(arr, n, largest);
         }
     }
 }

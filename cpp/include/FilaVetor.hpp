@@ -1,7 +1,7 @@
 #ifndef FILA_VETOR_HPP
 #define FILA_VETOR_HPP
 
-#define MAX 10000
+#define MAX 100000
 
 class FilaVetor
 {

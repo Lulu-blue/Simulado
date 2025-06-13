@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include "../include/Fila_vetor.h"
+#include "Fila_vetor.h"
 
-// Operações básicas da fila (mantidas como você tinha)
 void fila_vetor_inicializar(FilaVetor *f) {
     f->inicio = 0;
     f->fim = -1;
@@ -39,7 +37,6 @@ int fila_vetor_desenfileirar(FilaVetor *f) {
     return valor;
 }
 
-// Função auxiliar para Heap Sort
 static void heapify(int arr[], int n, int i) {
     int maior = i;
     int esq = 2 * i + 1;
@@ -65,28 +62,21 @@ void heap_sort_fila_vetor(FilaVetor *f) {
     int temp[MAX];
     int n = f->tamanho;
     
-    // Extrai todos os elementos da fila
     for (int i = 0; i < n; i++) {
         temp[i] = fila_vetor_desenfileirar(f);
     }
 
-    // Constrói o heap
     for (int i = n / 2 - 1; i >= 0; i--) {
         heapify(temp, n, i);
     }
 
-    // Extrai elementos do heap um por um
     for (int i = n - 1; i > 0; i--) {
-        // Move a raiz atual para o final
         int temp_val = temp[0];
         temp[0] = temp[i];
         temp[i] = temp_val;
-
-        // Chama heapify na heap reduzida
         heapify(temp, i, 0);
     }
 
-    // Reinsere os elementos ordenados na fila
     for (int i = 0; i < n; i++) {
         fila_vetor_enfileirar(f, temp[i]);
     }

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/Pilha_vetor.h"
+#include "Pilha_vetor.h"
 
 void pilha_vetor_inicializar(PilhaVetor *p) {
     p->topo = -1;
@@ -30,43 +30,34 @@ int pilha_vetor_desempilhar(PilhaVetor *p) {
     return p->dados[p->topo--];
 }
 
+static void heapify(int arr[], int n, int i) {
+    int maior = i;
+    int esq = 2 * i + 1;
+    int dir = 2 * i + 2;
+
+    if (esq < n && arr[esq] > arr[maior]) maior = esq;
+    if (dir < n && arr[dir] > arr[maior]) maior = dir;
+
+    if (maior != i) {
+        int temp = arr[i];
+        arr[i] = arr[maior];
+        arr[maior] = temp;
+        heapify(arr, n, maior);
+    }
+}
+
 void heap_sort_pilha_vetor(PilhaVetor *p) {
     int n = p->topo + 1;
-    
-    // Heapify
+    if (n <= 1) return;
+
     for (int i = n / 2 - 1; i >= 0; i--) {
-        int maior = i;
-        int esq = 2 * i + 1;
-        int dir = 2 * i + 2;
-        
-        if (esq < n && p->dados[esq] > p->dados[maior]) maior = esq;
-        if (dir < n && p->dados[dir] > p->dados[maior]) maior = dir;
-        
-        if (maior != i) {
-            int temp = p->dados[i];
-            p->dados[i] = p->dados[maior];
-            p->dados[maior] = temp;
-        }
+        heapify(p->dados, n, i);
     }
-    
-    // Extrair elementos
+
     for (int i = n - 1; i > 0; i--) {
         int temp = p->dados[0];
         p->dados[0] = p->dados[i];
         p->dados[i] = temp;
-        
-        // Heapify reduzido
-        int maior = 0;
-        int esq = 1;
-        int dir = 2;
-        
-        if (esq < i && p->dados[esq] > p->dados[maior]) maior = esq;
-        if (dir < i && p->dados[dir] > p->dados[maior]) maior = dir;
-        
-        if (maior != 0) {
-            int temp = p->dados[0];
-            p->dados[0] = p->dados[maior];
-            p->dados[maior] = temp;
-        }
+        heapify(p->dados, i, 0);
     }
 }

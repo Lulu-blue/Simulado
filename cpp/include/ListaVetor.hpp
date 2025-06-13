@@ -1,7 +1,7 @@
 #ifndef LISTA_VETOR_HPP
 #define LISTA_VETOR_HPP
 
-#define MAX 10000
+#define MAX 100000
 
 class ListaVetor
 {

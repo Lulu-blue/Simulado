@@ -1,51 +1,33 @@
-public class PilhaPonteiro {
-    private class NoPilha {
-        int valor;
-        NoPilha prox;
-        NoPilha(int v) { valor = v; }
+public class PilhaVetor {
+    private static final int MAX = 1000000;
+    private int[] dados;
+    private int topo;
+
+    public PilhaVetor() {
+        dados = new int[MAX];
+        topo = -1;
     }
 
-    private NoPilha topo;
-    private int tamanho;
-
-    public PilhaPonteiro() {
-        topo = null;
-        tamanho = 0;
-    }
-
-    public boolean estaVazia() { return topo == null; }
+    public boolean estaVazia() { return topo == -1; }
+    public boolean estaCheia() { return topo == MAX - 1; }
 
     public void empilhar(int valor) {
-        NoPilha novo = new NoPilha(valor);
-        novo.prox = topo;
-        topo = novo;
-        tamanho++;
+        if (estaCheia()) throw new RuntimeException("Pilha cheia!");
+        dados[++topo] = valor;
     }
 
     public int desempilhar() {
         if (estaVazia()) throw new RuntimeException("Pilha vazia!");
-        int valor = topo.valor;
-        topo = topo.prox;
-        tamanho--;
-        return valor;
+        return dados[topo--];
     }
 
     public void heapSort() {
-        if (tamanho <= 1) return;
+        if (topo <= 0) return;
 
-        int[] temp = new int[tamanho];
-        for (int i = 0; i < temp.length; i++)
-            temp[i] = desempilhar();
-
-        heapSortArray(temp);
-
-        for (int i = temp.length - 1; i >= 0; i--)
-            empilhar(temp[i]);
+        heapSortArray(dados, topo + 1);
     }
 
-    private void heapSortArray(int[] arr) {
-        int n = arr.length;
-        
+    private void heapSortArray(int[] arr, int n) {
         for (int i = n/2 - 1; i >= 0; i--)
             heapify(arr, n, i);
         

@@ -1,7 +1,7 @@
 #ifndef PILHA_VETOR_HPP
 #define PILHA_VETOR_HPP
 
-#define MAX 10000
+#define MAX 100000
 
 class PilhaVetor
 {

@@ -171,16 +171,20 @@ void Benchmark::executar()
 {
     std::cout << "=== Benchmark Heap Sort ===\n";
     
-    std::vector<int> tamanhos = {100, 1000, 5000, 10000};
+    std::vector<int> tamanhos = {100, 1000, 10000, 100000, 1000000};  // Added 100000 and 1000000
     
     for (int tamanho : tamanhos) {
         std::cout << "\nTestando com " << tamanho << " elementos:\n";
+
+        if (tamanho <= 100000)
+        {
+            testar_heap_sort<FilaPonteiro>(ratings, tamanho, "Fila (ponteiro)");
+            testar_heap_sort<PilhaPonteiro>(ratings, tamanho, "Pilha (ponteiro)");
+            testar_heap_sort<ListaPonteiro>(ratings, tamanho, "Lista (ponteiro)");
+        }
         
-        testar_heap_sort<FilaPonteiro>(ratings, tamanho, "Fila (ponteiro)");
         testar_heap_sort<FilaVetor>(ratings, tamanho, "Fila (vetor)");
-        testar_heap_sort<PilhaPonteiro>(ratings, tamanho, "Pilha (ponteiro)");
         testar_heap_sort<PilhaVetor>(ratings, tamanho, "Pilha (vetor)");
-        testar_heap_sort<ListaPonteiro>(ratings, tamanho, "Lista (ponteiro)");
         testar_heap_sort<ListaVetor>(ratings, tamanho, "Lista (vetor)");
     }
 }

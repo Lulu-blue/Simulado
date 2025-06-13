@@ -16,7 +16,7 @@
 class Benchmark
 {
     private:
-        static const int MAX_ENTRIES = 10000;
+        static const int MAX_ENTRIES = 1000000;
         std::vector<Rating> ratings;
 
         void carregar_ratings(const std::string& filename);

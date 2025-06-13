@@ -1,93 +1,84 @@
-
-public class FilaVetor 
-{
-    private static final int MAX = 10000;
+public class FilaVetor {
+    private static final int MAX = 1000000;
     private int[] dados;
     private int inicio;
     private int fim;
     private int tamanho;
 
-    public FilaVetor() 
-    {
+    public FilaVetor() {
         dados = new int[MAX];
-        inicializar();
-    }
-
-    public void inicializar() 
-    {
         inicio = 0;
         fim = -1;
         tamanho = 0;
     }
 
-    public boolean estaVazia() {return tamanho == 0;}
+    public boolean estaVazia() { return tamanho == 0; }
+    public boolean estaCheia() { return tamanho == MAX; }
 
-    public boolean estaCheia() {return tamanho == MAX;}
-
-    public void enfileirar(int valor) 
-    {
-        if (estaCheia())
-        {
-            System.out.println("Fila cheia!");
-            return;
-        }
+    public void enfileirar(int valor) {
+        if (estaCheia()) throw new RuntimeException("Fila cheia!");
         fim = (fim + 1) % MAX;
         dados[fim] = valor;
         tamanho++;
     }
 
-    public int desenfileirar()
-    {
-        if (estaVazia()) 
-        {
-            System.out.println("Fila vazia!");
-            return -1;
-        }
+    public int desenfileirar() {
+        if (estaVazia()) throw new RuntimeException("Fila vazia!");
         int valor = dados[inicio];
         inicio = (inicio + 1) % MAX;
         tamanho--;
         return valor;
     }
 
-    public void heapSort()
-    {
+    public void heapSort() {
         if (tamanho <= 1) return;
 
         int[] temp = new int[tamanho];
-        int n = tamanho;
-
-        for (int i = 0; i < n; i++) {temp[i] = desenfileirar();}
-
-        for (int i = n / 2 - 1; i >= 0; i--) {heapify(temp, n, i);}
-
-        for (int i = n - 1; i > 0; i--)
-        {
-            int tempVal = temp[0];
-            temp[0] = temp[i];
-            temp[i] = tempVal;
-
-            heapify(temp, i, 0);
+        for (int i = 0; i < temp.length; i++) {
+            temp[i] = desenfileirar();
         }
 
-        for (int i = 0; i < n; i++) {enfileirar(temp[i]);}
+        heapSortArray(temp);
+
+        for (int val : temp) {
+            enfileirar(val);
+        }
     }
 
-    private void heapify(int[] arr, int n, int i)
-    {
-        int maior = i;
-        int esq = 2 * i + 1;
-        int dir = 2 * i + 2;
+    private void heapSortArray(int[] arr) {
+        // Same implementation as in FilaPonteiro
+        int n = arr.length;
+        
+        for (int i = n/2 - 1; i >= 0; i--)
+            heapify(arr, n, i);
+        
+        for (int i = n-1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            
+            heapify(arr, i, 0);
+        }
+    }
 
-        if (esq < n && arr[esq] > arr[maior]) {maior = esq;}
+    private void heapify(int[] arr, int n, int i) {
+        // Same implementation as in FilaPonteiro
+        int largest = i;
+        int left = 2*i + 1;
+        int right = 2*i + 2;
 
-        if (dir < n && arr[dir] > arr[maior]) {maior = dir;}
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
 
-        if (maior != i)
-        {
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest != i) {
             int swap = arr[i];
-            arr[i] = arr[maior];
-            arr[maior] = swap;
-            heapify(arr, n, maior);
+            arr[i] = arr[largest];
+            arr[largest] = swap;
+
+            heapify(arr, n, largest);
         }
     }
 }

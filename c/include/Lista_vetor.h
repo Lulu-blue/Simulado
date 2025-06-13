@@ -1,8 +1,7 @@
 #ifndef LISTA_VETOR_H
 #define LISTA_VETOR_H
 
-#define MAX 10000
-
+#define MAX 1000000
 typedef struct {
     int dados[MAX];
     int tamanho;

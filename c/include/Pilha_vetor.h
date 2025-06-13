@@ -1,7 +1,7 @@
 #ifndef PILHA_VETOR_H
 #define PILHA_VETOR_H
 
-#define MAX 10000
+#define MAX 1000000
 
 typedef struct {
     int dados[MAX];

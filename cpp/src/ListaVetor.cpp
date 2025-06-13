@@ -17,23 +17,24 @@ void ListaVetor::heap_sort()
 {
     if (tamanho <= 1) return;
 
-    std::function<void(int[], int, int)> heapify;
-    
-    heapify = [&heapify](int arr[], int n, int i) {
-        int maior = i;
-        int esq = 2 * i + 1;
-        int dir = 2 * i + 2;
+    auto heapify = [](int arr[], int n, int i) {
+        while (true) {
+            int maior = i;
+            int esq = 2 * i + 1;
+            int dir = 2 * i + 2;
 
-        if (esq < n && arr[esq] > arr[maior]) maior = esq;
-        if (dir < n && arr[dir] > arr[maior]) maior = dir;
+            if (esq < n && arr[esq] > arr[maior]) maior = esq;
+            if (dir < n && arr[dir] > arr[maior]) maior = dir;
 
-        if (maior != i) {
+            if (maior == i) break;
+            
             std::swap(arr[i], arr[maior]);
-            heapify(arr, n, maior);
+            i = maior;
         }
     };
 
     for (int i = tamanho/2-1; i >= 0; i--) heapify(dados, tamanho, i);
+
     for (int i = tamanho-1; i > 0; i--) {
         std::swap(dados[0], dados[i]);
         heapify(dados, i, 0);

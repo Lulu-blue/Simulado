@@ -46,15 +46,17 @@ class FilaPonteiro:
         while not self.esta_vazia():
             elementos.append(self.desenfileirar())
         
-        # Heap Sort
-        elementos.sort()  # Python usa TimSort, mas para fins de comparação
+        # Heap Sort usando heapq
+        heap = []
+        for elem in elementos:
+            heappush(heap, elem)
         
         # Reinsere ordenado
-        for elem in elementos:
-            self.enfileirar(elem)
+        while heap:
+            self.enfileirar(heappop(heap))
 
 class FilaVetor:
-    def __init__(self, max_size=10000):
+    def __init__(self, max_size=1000000):
         self.dados = [0] * max_size
         self.inicio = 0
         self.fim = -1
@@ -93,12 +95,14 @@ class FilaVetor:
         while not self.esta_vazia():
             elementos.append(self.desenfileirar())
         
-        # Heap Sort
-        elementos.sort()
+        # Heap Sort usando heapq
+        heap = []
+        for elem in elementos:
+            heappush(heap, elem)
         
         # Reinsere ordenado
-        for elem in elementos:
-            self.enfileirar(elem)
+        while heap:
+            self.enfileirar(heappop(heap))
 
 class NoPilha:
     def __init__(self, valor):
@@ -138,15 +142,17 @@ class PilhaPonteiro:
         while not self.esta_vazia():
             elementos.append(self.desempilhar())
         
-        # Heap Sort
-        elementos.sort()
+        # Heap Sort usando heapq
+        heap = []
+        for elem in elementos:
+            heappush(heap, elem)
         
         # Reinsere ordenado
-        for elem in elementos:
-            self.empilhar(elem)
+        while heap:
+            self.empilhar(heappop(heap))
 
 class PilhaVetor:
-    def __init__(self, max_size=10000):
+    def __init__(self, max_size=1000000):
         self.dados = [0] * max_size
         self.topo = -1
         self.max_size = max_size
@@ -181,12 +187,14 @@ class PilhaVetor:
         while not self.esta_vazia():
             elementos.append(self.desempilhar())
         
-        # Heap Sort
-        elementos.sort()
+        # Heap Sort usando heapq
+        heap = []
+        for elem in elementos:
+            heappush(heap, elem)
         
         # Reinsere ordenado
-        for elem in elementos:
-            self.empilhar(elem)
+        while heap:
+            self.empilhar(heappop(heap))
 
 class NoLista:
     def __init__(self, valor):
@@ -215,17 +223,19 @@ class ListaPonteiro:
             elementos.append(atual.valor)
             atual = atual.prox
         
-        # Heap Sort
-        elementos.sort()
+        # Heap Sort usando heapq
+        heap = []
+        for elem in elementos:
+            heappush(heap, elem)
         
         # Atualiza os valores na lista
         atual = self.inicio
-        for elem in elementos:
-            atual.valor = elem
+        while heap:
+            atual.valor = heappop(heap)
             atual = atual.prox
 
 class ListaVetor:
-    def __init__(self, max_size=10000):
+    def __init__(self, max_size=1000000):
         self.dados = [0] * max_size
         self.tamanho = 0
         self.max_size = max_size
@@ -290,6 +300,10 @@ def carregar_ratings(filename):
     return ratings
 
 def testar_heap_sort_fila_ponteiro(ratings, size):
+    if size > 100000:  # Limite para estruturas baseadas em ponteiros
+        print(f"Fila (ponteiro) {size:6d} elementos: Não testado (limite 100.000)")
+        return
+    
     fila = FilaPonteiro()
     for i in range(size):
         fila.enfileirar(int(ratings[i]['rating'] * 100))
@@ -314,6 +328,10 @@ def testar_heap_sort_fila_vetor(ratings, size):
     print(f"Fila (vetor)    {size:6d} elementos: {tempo_ms:8.3f} ms")
 
 def testar_heap_sort_pilha_ponteiro(ratings, size):
+    if size > 100000:  # Limite para estruturas baseadas em ponteiros
+        print(f"Pilha (ponteiro){size:6d} elementos: Não testado (limite 100.000)")
+        return
+    
     pilha = PilhaPonteiro()
     for i in range(size):
         pilha.empilhar(int(ratings[i]['rating'] * 100))
@@ -338,6 +356,10 @@ def testar_heap_sort_pilha_vetor(ratings, size):
     print(f"Pilha (vetor)   {size:6d} elementos: {tempo_ms:8.3f} ms")
 
 def testar_heap_sort_lista_ponteiro(ratings, size):
+    if size > 100000:  # Limite para estruturas baseadas em ponteiros
+        print(f"Lista (ponteiro){size:6d} elementos: Não testado (limite 100.000)")
+        return
+    
     lista = ListaPonteiro()
     for i in range(size):
         lista.inserir(int(ratings[i]['rating'] * 100))
@@ -364,7 +386,7 @@ def testar_heap_sort_lista_vetor(ratings, size):
 def main():
     print("=== Benchmark Heap Sort ===")
     ratings = carregar_ratings("ratings.csv")
-    tamanhos = [100, 1000, 5000, 10000]
+    tamanhos = [100, 1000, 10000, 100000, 1000000]
     
     for tamanho in tamanhos:
         print(f"\nTestando com {tamanho} elementos:")

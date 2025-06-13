@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include "../include/Fila_pont.h"
+#include "Fila_pont.h"
 
-// Operações básicas da fila (mantidas como você tinha)
 void fila_ponteiro_inicializar(FilaPonteiro *f) {
     f->inicio = NULL;
     f->fim = NULL;
@@ -16,6 +14,10 @@ int fila_ponteiro_esta_vazia(FilaPonteiro *f) {
 
 void fila_ponteiro_enfileirar(FilaPonteiro *f, int valor) {
     NoFila *novo = (NoFila *)malloc(sizeof(NoFila));
+    if (!novo) {
+        printf("Erro ao alocar memória\n");
+        exit(EXIT_FAILURE);
+    }
     novo->valor = valor;
     novo->prox = NULL;
 
@@ -48,7 +50,6 @@ int fila_ponteiro_desenfileirar(FilaPonteiro *f) {
     return valor;
 }
 
-// Função auxiliar para Heap Sort
 static void heapify(int arr[], int n, int i) {
     int maior = i;
     int esq = 2 * i + 1;
@@ -71,27 +72,25 @@ static void heapify(int arr[], int n, int i) {
 void heap_sort_fila_ponteiro(FilaPonteiro *f) {
     if (f->tamanho <= 1) return;
 
-    // Aloca array temporário
     int *temp = (int *)malloc(f->tamanho * sizeof(int));
+    if (!temp) {
+        printf("Erro ao alocar memória\n");
+        exit(EXIT_FAILURE);
+    }
     int n = f->tamanho;
     
-    // Extrai todos os elementos da fila
     for (int i = 0; i < n; i++) {
         temp[i] = fila_ponteiro_desenfileirar(f);
     }
 
-    // Constrói o heap
     for (int i = n / 2 - 1; i >= 0; i--) {
         heapify(temp, n, i);
     }
 
- 
     for (int i = n - 1; i > 0; i--) {
-        // Move a raiz atual para o final
         int temp_val = temp[0];
         temp[0] = temp[i];
         temp[i] = temp_val;
-
         heapify(temp, i, 0);
     }
 
@@ -101,4 +100,3 @@ void heap_sort_fila_ponteiro(FilaPonteiro *f) {
 
     free(temp);
 }
-

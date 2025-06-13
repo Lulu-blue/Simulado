@@ -1,46 +1,42 @@
-public class PilhaPonteiro {
-    private class NoPilha {
+public class ListaPonteiro {
+    private class NoLista {
         int valor;
-        NoPilha prox;
-        NoPilha(int v) { valor = v; }
+        NoLista prox;
+        NoLista(int v) { valor = v; }
     }
 
-    private NoPilha topo;
+    private NoLista inicio;
     private int tamanho;
 
-    public PilhaPonteiro() {
-        topo = null;
+    public ListaPonteiro() {
+        inicio = null;
         tamanho = 0;
     }
 
-    public boolean estaVazia() { return topo == null; }
-
-    public void empilhar(int valor) {
-        NoPilha novo = new NoPilha(valor);
-        novo.prox = topo;
-        topo = novo;
+    public void inserir(int valor) {
+        NoLista novo = new NoLista(valor);
+        novo.prox = inicio;
+        inicio = novo;
         tamanho++;
-    }
-
-    public int desempilhar() {
-        if (estaVazia()) throw new RuntimeException("Pilha vazia!");
-        int valor = topo.valor;
-        topo = topo.prox;
-        tamanho--;
-        return valor;
     }
 
     public void heapSort() {
         if (tamanho <= 1) return;
 
         int[] temp = new int[tamanho];
-        for (int i = 0; i < temp.length; i++)
-            temp[i] = desempilhar();
+        NoLista atual = inicio;
+        for (int i = 0; i < temp.length; i++) {
+            temp[i] = atual.valor;
+            atual = atual.prox;
+        }
 
         heapSortArray(temp);
 
-        for (int i = temp.length - 1; i >= 0; i--)
-            empilhar(temp[i]);
+        atual = inicio;
+        for (int i = 0; i < temp.length; i++) {
+            atual.valor = temp[i];
+            atual = atual.prox;
+        }
     }
 
     private void heapSortArray(int[] arr) {

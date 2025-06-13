@@ -36,30 +36,35 @@ void FilaVetor::heap_sort()
 {
     if (tamanho <= 1) return;
 
-    std::function<void(int[], int, int)> heapify;
-    
-    heapify = [&heapify](int arr[], int n, int i) {
-        int maior = i;
-        int esq = 2 * i + 1;
-        int dir = 2 * i + 2;
+    auto heapify = [](int arr[], int n, int i) {
+        while (true) {
+            int maior = i;
+            int esq = 2 * i + 1;
+            int dir = 2 * i + 2;
 
-        if (esq < n && arr[esq] > arr[maior]) maior = esq;
-        if (dir < n && arr[dir] > arr[maior]) maior = dir;
+            if (esq < n && arr[esq] > arr[maior]) maior = esq;
+            if (dir < n && arr[dir] > arr[maior]) maior = dir;
 
-        if (maior != i) {
+            if (maior == i) break;
+            
             std::swap(arr[i], arr[maior]);
-            heapify(arr, n, maior);
+            i = maior;
         }
     };
 
-    int temp[MAX];
+    int* temp = new int[tamanho];
     int n = tamanho;
-    
+
     for (int i = 0; i < n; i++) temp[i] = desenfileirar();
+
     for (int i = n/2-1; i >= 0; i--) heapify(temp, n, i);
+    
     for (int i = n-1; i > 0; i--) {
         std::swap(temp[0], temp[i]);
         heapify(temp, i, 0);
     }
+
     for (int i = 0; i < n; i++) enfileirar(temp[i]);
+    
+    delete[] temp;
 }
