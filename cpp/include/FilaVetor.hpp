@@ -1,31 +1,24 @@
-#pragma once
-#include "Fila.hpp"
-#include <vector>
+#ifndef FILA_VETOR_HPP
+#define FILA_VETOR_HPP
 
-template <typename T>
+#define MAX 10000
 
-class FilaVetor : public Fila<T> 
+class FilaVetor
 {
     private:
-        std::vector<T> dados;
-        
+        int dados[MAX];
+        int inicio;
+        int fim;
+        int tamanho;
+
     public:
-        void enfileirar(T valor) override {dados.push_back(valor);}
-
-        T desenfileirar() override
-        {
-            if (vazia()) throw std::runtime_error("Fila vazia!");
-            T valor = dados.front();
-            dados.erase(dados.begin());
-            return valor;
-        }
-
-        bool vazia() const override {return dados.empty();}
-
-        void imprimir() const override
-        {
-            for (const auto& item : dados)
-            {std::cout << item << " ";}
-            std::cout << std::endl;
-        }
+        FilaVetor();
+        bool esta_vazia() const;
+        bool esta_cheia() const;
+        void enfileirar(int valor);
+        int desenfileirar();
+        void heap_sort();
+        int get_tamanho() const { return tamanho; }
 };
+
+#endif
