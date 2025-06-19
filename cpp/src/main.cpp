@@ -1,8 +1,7 @@
-#include "Benchmark.hpp"
+#include "HeapSortBenchmark.hpp"
 
-int main()
-{
-    Benchmark benchmark;
-    benchmark.executar();
+int main() {
+    HeapSortBenchmark benchmark;
+    benchmark.run();
     return 0;
 }

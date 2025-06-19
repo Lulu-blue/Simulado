@@ -1,55 +1,76 @@
 public class PilhaVetor {
-    private static final int MAX = 1000000;
+    private static final int MAX = 100000;
     private int[] dados;
     private int topo;
-
+    
     public PilhaVetor() {
         dados = new int[MAX];
         topo = -1;
     }
-
-    public boolean estaVazia() { return topo == -1; }
-    public boolean estaCheia() { return topo == MAX - 1; }
-
+    
+    public boolean estaVazia() {
+        return topo == -1;
+    }
+    
+    public boolean estaCheia() {
+        return topo == MAX - 1;
+    }
+    
     public void empilhar(int valor) {
-        if (estaCheia()) throw new RuntimeException("Pilha cheia!");
+        if (estaCheia()) {
+            System.out.println("Pilha cheia!");
+            return;
+        }
         dados[++topo] = valor;
     }
-
+    
     public int desempilhar() {
-        if (estaVazia()) throw new RuntimeException("Pilha vazia!");
+        if (estaVazia()) {
+            System.out.println("Pilha vazia!");
+            return -1;
+        }
         return dados[topo--];
     }
-
+    
     public void heapSort() {
-        if (topo <= 0) return;
-
-        heapSortArray(dados, topo + 1);
-    }
-
-    private void heapSortArray(int[] arr, int n) {
-        for (int i = n/2 - 1; i >= 0; i--)
-            heapify(arr, n, i);
+        if (topo + 1 <= 1) return;
         
-        for (int i = n-1; i > 0; i--) {
-            int temp = arr[0];
-            arr[0] = arr[i];
-            arr[i] = temp;
-            heapify(arr, i, 0);
+        int n = topo + 1;
+        
+        // Build heap
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(dados, n, i);
+        }
+        
+        // Extract elements from heap
+        for (int i = n - 1; i > 0; i--) {
+            int swap = dados[0];
+            dados[0] = dados[i];
+            dados[i] = swap;
+            
+            heapify(dados, i, 0);
         }
     }
-
+    
     private void heapify(int[] arr, int n, int i) {
-        int largest = i, left = 2*i + 1, right = 2*i + 2;
-
-        if (left < n && arr[left] > arr[largest]) largest = left;
-        if (right < n && arr[right] > arr[largest]) largest = right;
-
-        if (largest != i) {
+        int maior = i;
+        int esq = 2 * i + 1;
+        int dir = 2 * i + 2;
+        
+        if (esq < n && arr[esq] > arr[maior]) {
+            maior = esq;
+        }
+        
+        if (dir < n && arr[dir] > arr[maior]) {
+            maior = dir;
+        }
+        
+        if (maior != i) {
             int swap = arr[i];
-            arr[i] = arr[largest];
-            arr[largest] = swap;
-            heapify(arr, n, largest);
+            arr[i] = arr[maior];
+            arr[maior] = swap;
+            
+            heapify(arr, n, maior);
         }
     }
 }

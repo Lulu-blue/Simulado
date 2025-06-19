@@ -1,7 +1,7 @@
 #ifndef BENCHMARK_H
 #define BENCHMARK_H
 
-#define MAX_ENTRIES 1000000
+#define MAX_ENTRIES 100000
 
 typedef struct {
     int userId;

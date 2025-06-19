@@ -21,8 +21,7 @@ void testar_heap_sort_fila_ponteiro(Rating ratings[], int size) {
     }
     
     heap_sort_fila_ponteiro(&fila);
-    
-    // Libera memória
+
     while (!fila_ponteiro_esta_vazia(&fila)) {
         fila_ponteiro_desenfileirar(&fila);
     }
@@ -48,8 +47,7 @@ void testar_heap_sort_pilha_ponteiro(Rating ratings[], int size) {
     }
     
     heap_sort_pilha_ponteiro(&pilha);
-    
-    // Libera memória
+
     while (!pilha_ponteiro_esta_vazia(&pilha)) {
         pilha_ponteiro_desempilhar(&pilha);
     }
@@ -75,8 +73,7 @@ void testar_heap_sort_lista_ponteiro(Rating ratings[], int size) {
     }
     
     heap_sort_lista_ponteiro(&lista);
-    
-    // Libera memória
+
     NoLista *atual = lista.inicio;
     while (atual != NULL) {
         NoLista *temp = atual;
@@ -103,7 +100,7 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    int tamanhos[] = {100, 1000, 10000, 100000, 1000000};
+    int tamanhos[] = {100, 1000, 10000, 100000};
     int num_tamanhos = sizeof(tamanhos) / sizeof(tamanhos[0]);
 
     printf("=== Benchmark Heap Sort ===\n");
@@ -115,7 +112,8 @@ int main() {
         clock_t inicio, fim;
         double tempo;
 
-        if (tamanhos[i] <= 100000) {
+        if (tamanhos[i] <= 100000)
+        {
             inicio = clock();
             testar_heap_sort_fila_ponteiro(ratings, tamanhos[i]);
             fim = clock();
@@ -133,9 +131,7 @@ int main() {
             fim = clock();
             tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
             printf("Lista Ponteiro: %.5f segundos\n", tempo);
-        } else {
-            printf("Estruturas com ponteiros não testadas para %d elementos (limite 100000)\n", tamanhos[i]);
-        }
+        } 
 
         inicio = clock();
         testar_heap_sort_fila_vetor(ratings, tamanhos[i]);

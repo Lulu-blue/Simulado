@@ -1,24 +1,24 @@
 #ifndef FILA_VETOR_HPP
 #define FILA_VETOR_HPP
 
-#define MAX 100000
-
-class FilaVetor
-{
-    private:
-        int dados[MAX];
-        int inicio;
-        int fim;
-        int tamanho;
-
-    public:
-        FilaVetor();
-        bool esta_vazia() const;
-        bool esta_cheia() const;
-        void enfileirar(int valor);
-        int desenfileirar();
-        void heap_sort();
-        int get_tamanho() const { return tamanho; }
+class FilaVetor {
+private:
+    static const int MAX = 100000;
+    int dados[MAX];
+    int inicio;
+    int fim;
+    int tamanho;
+    
+    void heapify(int arr[], int n, int i);
+    
+public:
+    FilaVetor();
+    bool estaVazia() const;
+    bool estaCheia() const;
+    void enfileirar(int valor);
+    int desenfileirar();
+    void heapSort();
+    int getTamanho() const { return tamanho; }
 };
 
-#endif
+#endif 

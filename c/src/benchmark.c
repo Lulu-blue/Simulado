@@ -4,7 +4,7 @@
 
 void executar_benchmark() {
     Rating ratings[MAX_ENTRIES];
-    int tamanhos[] = {100, 1000, 10000, 100000, 1000000};
+    int tamanhos[] = {100, 1000, 10000, 100000};
     int num_tamanhos = sizeof(tamanhos) / sizeof(tamanhos[0]);
 
     printf("=== Benchmark Heap Sort ===\n");

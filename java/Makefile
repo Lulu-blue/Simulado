@@ -1,19 +1,12 @@
 JC = javac
-JVM = java
-SRC = src
-BIN = bin
-MAIN = benchmark.HeapSortBenchmark
+JFLAGS = -d bin
+SRC = src/*.java
 
-compile:
-	$(JC) -d $(BIN) $(SRC)/benchmark/*.java $(SRC)/model/**/*.java $(SRC)/no/*.java
+all:
+	$(JC) $(JFLAGS) $(SRC)
 
 run:
-	$(JVM) -cp $(BIN) $(MAIN)
+	java -cp bin Main
 
 clean:
-	rm -rf $(BIN)/*
-
-jar:
-	jar cvfm HeapSortBenchmark.jar MANIFEST.MF -C bin .
-
-.PHONY: compile run clean jar
+	rm -rf bin/*.class

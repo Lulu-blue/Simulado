@@ -1,22 +1,22 @@
 #ifndef PILHA_VETOR_HPP
 #define PILHA_VETOR_HPP
 
-#define MAX 100000
-
-class PilhaVetor
-{
-    private:
-        int dados[MAX];
-        int topo;
-
-    public:
-        PilhaVetor();
-        bool esta_vazia() const;
-        bool esta_cheia() const;
-        void empilhar(int valor);
-        int desempilhar();
-        void heap_sort();
-        int get_tamanho() const { return topo + 1; }
+class PilhaVetor {
+private:
+    static const int MAX = 100000;
+    int dados[MAX];
+    int topo;
+    
+    void heapify(int arr[], int n, int i);
+    
+public:
+    PilhaVetor();
+    bool estaVazia() const;
+    bool estaCheia() const;
+    void empilhar(int valor);
+    int desempilhar();
+    void heapSort();
+    int getTamanho() const { return topo + 1; }
 };
 
-#endif
+#endif // PILHA_VETOR_H

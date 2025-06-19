@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void carregar_ratings(const char* filename, Rating ratings[], int max) {
-    const char* paths[] = {
+void carregar_ratings(const char* filename, Rating ratings[], int max)
+{
+    const char* paths[] =
+    {
         filename,
         "../data/ratings.csv",
         "./data/ratings.csv",

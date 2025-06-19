@@ -1,6 +1,6 @@
 import time
-import csv
-from heapq import heappush, heappop
+import random
+import heapq
 
 class NoFila:
     def __init__(self, valor):
@@ -41,39 +41,40 @@ class FilaPonteiro:
         if self.tamanho <= 1:
             return
         
-        # Extrai todos os elementos
-        elementos = []
-        while not self.esta_vazia():
-            elementos.append(self.desenfileirar())
+        temp = []
+        n = self.tamanho
+        for _ in range(n):
+            temp.append(self.desenfileirar())
         
-        # Heap Sort usando heapq
-        heap = []
-        for elem in elementos:
-            heappush(heap, elem)
+        heapq._heapify_max(temp)
         
-        # Reinsere ordenado
-        while heap:
-            self.enfileirar(heappop(heap))
+        for i in range(n-1, 0, -1):
+            temp[0], temp[i] = temp[i], temp[0]
+            heapq._siftdown_max(temp, 0, i)
+        
+        for valor in temp:
+            self.enfileirar(valor)
 
 class FilaVetor:
-    def __init__(self, max_size=1000000):
-        self.dados = [0] * max_size
+    MAX = 100000
+    
+    def __init__(self):
+        self.dados = [0] * self.MAX
         self.inicio = 0
         self.fim = -1
         self.tamanho = 0
-        self.max_size = max_size
     
     def esta_vazia(self):
         return self.tamanho == 0
     
     def esta_cheia(self):
-        return self.tamanho == self.max_size
+        return self.tamanho == self.MAX
     
     def enfileirar(self, valor):
         if self.esta_cheia():
             print("Fila cheia!")
             return
-        self.fim = (self.fim + 1) % self.max_size
+        self.fim = (self.fim + 1) % self.MAX
         self.dados[self.fim] = valor
         self.tamanho += 1
     
@@ -82,7 +83,7 @@ class FilaVetor:
             print("Fila vazia!")
             return -1
         valor = self.dados[self.inicio]
-        self.inicio = (self.inicio + 1) % self.max_size
+        self.inicio = (self.inicio + 1) % self.MAX
         self.tamanho -= 1
         return valor
     
@@ -90,19 +91,77 @@ class FilaVetor:
         if self.tamanho <= 1:
             return
         
-        # Extrai todos os elementos
-        elementos = []
-        while not self.esta_vazia():
-            elementos.append(self.desenfileirar())
+        temp = []
+        n = self.tamanho
+        for _ in range(n):
+            temp.append(self.desenfileirar())
         
-        # Heap Sort usando heapq
-        heap = []
-        for elem in elementos:
-            heappush(heap, elem)
+        heapq._heapify_max(temp)
         
-        # Reinsere ordenado
-        while heap:
-            self.enfileirar(heappop(heap))
+        for i in range(n-1, 0, -1):
+            temp[0], temp[i] = temp[i], temp[0]
+            heapq._siftdown_max(temp, 0, i)
+        
+        for valor in temp:
+            self.enfileirar(valor)
+
+class NoLista:
+    def __init__(self, valor):
+        self.valor = valor
+        self.prox = None
+
+class ListaPonteiro:
+    def __init__(self):
+        self.inicio = None
+        self.tamanho = 0
+    
+    def inserir(self, valor):
+        novo = NoLista(valor)
+        novo.prox = self.inicio
+        self.inicio = novo
+        self.tamanho += 1
+    
+    def heap_sort(self):
+        temp = []
+        atual = self.inicio
+        while atual is not None:
+            temp.append(atual.valor)
+            atual = atual.prox
+        
+        heapq._heapify_max(temp)
+        
+        for i in range(len(temp)-1, 0, -1):
+            temp[0], temp[i] = temp[i], temp[0]
+            heapq._siftdown_max(temp, 0, i)
+        
+        atual = self.inicio
+        for valor in temp:
+            atual.valor = valor
+            atual = atual.prox
+
+class ListaVetor:
+    MAX = 100000
+    
+    def __init__(self):
+        self.dados = []
+        self.tamanho = 0
+    
+    def inserir(self, valor):
+        if self.tamanho >= self.MAX:
+            print("Lista cheia!")
+            return
+        self.dados.append(valor)
+        self.tamanho += 1
+    
+    def heap_sort(self):
+        temp = self.dados.copy()
+        heapq._heapify_max(temp)
+        
+        for i in range(len(temp)-1, 0, -1):
+            temp[0], temp[i] = temp[i], temp[0]
+            heapq._siftdown_max(temp, 0, i)
+        
+        self.dados = temp
 
 class NoPilha:
     def __init__(self, valor):
@@ -134,271 +193,148 @@ class PilhaPonteiro:
         return valor
     
     def heap_sort(self):
-        if self.tamanho <= 1:
-            return
+        temp = []
+        n = self.tamanho
+        for _ in range(n):
+            temp.append(self.desempilhar())
         
-        # Extrai todos os elementos
-        elementos = []
-        while not self.esta_vazia():
-            elementos.append(self.desempilhar())
+        heapq._heapify_max(temp)
         
-        # Heap Sort usando heapq
-        heap = []
-        for elem in elementos:
-            heappush(heap, elem)
+        for i in range(n-1, 0, -1):
+            temp[0], temp[i] = temp[i], temp[0]
+            heapq._siftdown_max(temp, 0, i)
         
-        # Reinsere ordenado
-        while heap:
-            self.empilhar(heappop(heap))
+        for valor in temp:
+            self.empilhar(valor)
 
 class PilhaVetor:
-    def __init__(self, max_size=1000000):
-        self.dados = [0] * max_size
+    MAX = 100000
+    
+    def __init__(self):
+        self.dados = []
         self.topo = -1
-        self.max_size = max_size
     
     def esta_vazia(self):
         return self.topo == -1
     
     def esta_cheia(self):
-        return self.topo == self.max_size - 1
+        return self.topo == self.MAX - 1
     
     def empilhar(self, valor):
         if self.esta_cheia():
             print("Pilha cheia!")
             return
+        self.dados.append(valor)
         self.topo += 1
-        self.dados[self.topo] = valor
     
     def desempilhar(self):
         if self.esta_vazia():
             print("Pilha vazia!")
             return -1
-        valor = self.dados[self.topo]
         self.topo -= 1
-        return valor
+        return self.dados.pop()
     
     def heap_sort(self):
-        if self.topo <= 0:
-            return
+        temp = self.dados.copy()
+        heapq._heapify_max(temp)
         
-        # Extrai todos os elementos
-        elementos = []
-        while not self.esta_vazia():
-            elementos.append(self.desempilhar())
+        for i in range(len(temp)-1, 0, -1):
+            temp[0], temp[i] = temp[i], temp[0]
+            heapq._siftdown_max(temp, 0, i)
         
-        # Heap Sort usando heapq
-        heap = []
-        for elem in elementos:
-            heappush(heap, elem)
-        
-        # Reinsere ordenado
-        while heap:
-            self.empilhar(heappop(heap))
+        self.dados = temp
 
-class NoLista:
-    def __init__(self, valor):
-        self.valor = valor
-        self.prox = None
+def gerar_dados_aleatorios(tamanho):
+    return [random.randint(1, 100000) for _ in range(tamanho)]
 
-class ListaPonteiro:
-    def __init__(self):
-        self.inicio = None
-        self.tamanho = 0
-    
-    def inserir(self, valor):
-        novo = NoLista(valor)
-        novo.prox = self.inicio
-        self.inicio = novo
-        self.tamanho += 1
-    
-    def heap_sort(self):
-        if self.tamanho <= 1:
-            return
-        
-        # Extrai todos os elementos
-        elementos = []
-        atual = self.inicio
-        while atual is not None:
-            elementos.append(atual.valor)
-            atual = atual.prox
-        
-        # Heap Sort usando heapq
-        heap = []
-        for elem in elementos:
-            heappush(heap, elem)
-        
-        # Atualiza os valores na lista
-        atual = self.inicio
-        while heap:
-            atual.valor = heappop(heap)
-            atual = atual.prox
-
-class ListaVetor:
-    def __init__(self, max_size=1000000):
-        self.dados = [0] * max_size
-        self.tamanho = 0
-        self.max_size = max_size
-    
-    def inserir(self, valor):
-        if self.tamanho >= self.max_size:
-            print("Lista cheia!")
-            return
-        self.dados[self.tamanho] = valor
-        self.tamanho += 1
-    
-    def heap_sort(self):
-        if self.tamanho <= 1:
-            return
-        
-        # Cria uma heap mínima
-        heap = []
-        for i in range(self.tamanho):
-            heappush(heap, self.dados[i])
-        
-        # Extrai os elementos ordenados
-        for i in range(self.tamanho):
-            self.dados[i] = heappop(heap)
-
-def carregar_ratings(filename):
-    paths = [
-        filename,
-        "../data/ratings.csv",
-        "./data/ratings.csv",
-        "data/ratings.csv",
-        "../ratings.csv"
-    ]
-    
-    ratings = []
-    
-    for path in paths:
-        try:
-            with open(path, 'r') as file:
-                reader = csv.reader(file)
-                next(reader)  # Pula o cabeçalho
-                for row in reader:
-                    if len(row) == 4:
-                        rating = {
-                            'userId': int(row[0]),
-                            'movieId': int(row[1]),
-                            'rating': float(row[2]),
-                            'timestamp': int(row[3])
-                        }
-                        ratings.append(rating)
-                print(f"Arquivo encontrado em: {path}")
-                break
-        except FileNotFoundError:
-            continue
-    else:
-        print("Erro: Não foi possível encontrar o arquivo ratings.csv")
-        print("Procurou em:")
-        for path in paths:
-            print(f"- {path}")
-        exit(1)
-    
-    print(f"Carregados {len(ratings)} registros\n")
-    return ratings
-
-def testar_heap_sort_fila_ponteiro(ratings, size):
-    if size > 100000:  # Limite para estruturas baseadas em ponteiros
-        print(f"Fila (ponteiro) {size:6d} elementos: Não testado (limite 100.000)")
-        return
-    
+def testar_heap_sort_fila_ponteiro(dados):
     fila = FilaPonteiro()
-    for i in range(size):
-        fila.enfileirar(int(ratings[i]['rating'] * 100))
+    for valor in dados:
+        fila.enfileirar(valor)
     
     inicio = time.time()
     fila.heap_sort()
     fim = time.time()
     
-    tempo_ms = (fim - inicio) * 1000
-    print(f"Fila (ponteiro) {size:6d} elementos: {tempo_ms:8.3f} ms")
+    tempo_s = fim - inicio
+    print(f"Fila (ponteiro) {len(dados):6} elementos: {tempo_s:.6f} s")
 
-def testar_heap_sort_fila_vetor(ratings, size):
+def testar_heap_sort_fila_vetor(dados):
     fila = FilaVetor()
-    for i in range(size):
-        fila.enfileirar(int(ratings[i]['rating'] * 100))
+    for valor in dados:
+        fila.enfileirar(valor)
     
     inicio = time.time()
     fila.heap_sort()
     fim = time.time()
     
-    tempo_ms = (fim - inicio) * 1000
-    print(f"Fila (vetor)    {size:6d} elementos: {tempo_ms:8.3f} ms")
+    tempo_s = fim - inicio
+    print(f"Fila (vetor)    {len(dados):6} elementos: {tempo_s:.6f} s")
 
-def testar_heap_sort_pilha_ponteiro(ratings, size):
-    if size > 100000:  # Limite para estruturas baseadas em ponteiros
-        print(f"Pilha (ponteiro){size:6d} elementos: Não testado (limite 100.000)")
-        return
-    
+def testar_heap_sort_pilha_ponteiro(dados):
     pilha = PilhaPonteiro()
-    for i in range(size):
-        pilha.empilhar(int(ratings[i]['rating'] * 100))
+    for valor in dados:
+        pilha.empilhar(valor)
     
     inicio = time.time()
     pilha.heap_sort()
     fim = time.time()
     
-    tempo_ms = (fim - inicio) * 1000
-    print(f"Pilha (ponteiro){size:6d} elementos: {tempo_ms:8.3f} ms")
+    tempo_s = fim - inicio
+    print(f"Pilha (ponteiro){len(dados):6} elementos: {tempo_s:.6f} s")
 
-def testar_heap_sort_pilha_vetor(ratings, size):
+def testar_heap_sort_pilha_vetor(dados):
     pilha = PilhaVetor()
-    for i in range(size):
-        pilha.empilhar(int(ratings[i]['rating'] * 100))
+    for valor in dados:
+        pilha.empilhar(valor)
     
     inicio = time.time()
     pilha.heap_sort()
     fim = time.time()
     
-    tempo_ms = (fim - inicio) * 1000
-    print(f"Pilha (vetor)   {size:6d} elementos: {tempo_ms:8.3f} ms")
+    tempo_s = fim - inicio
+    print(f"Pilha (vetor)   {len(dados):6} elementos: {tempo_s:.6f} s")
 
-def testar_heap_sort_lista_ponteiro(ratings, size):
-    if size > 100000:  # Limite para estruturas baseadas em ponteiros
-        print(f"Lista (ponteiro){size:6d} elementos: Não testado (limite 100.000)")
-        return
-    
+def testar_heap_sort_lista_ponteiro(dados):
     lista = ListaPonteiro()
-    for i in range(size):
-        lista.inserir(int(ratings[i]['rating'] * 100))
+    for valor in dados:
+        lista.inserir(valor)
     
     inicio = time.time()
     lista.heap_sort()
     fim = time.time()
     
-    tempo_ms = (fim - inicio) * 1000
-    print(f"Lista (ponteiro){size:6d} elementos: {tempo_ms:8.3f} ms")
+    tempo_s = fim - inicio
+    print(f"Lista (ponteiro){len(dados):6} elementos: {tempo_s:.6f} s")
 
-def testar_heap_sort_lista_vetor(ratings, size):
+def testar_heap_sort_lista_vetor(dados):
     lista = ListaVetor()
-    for i in range(size):
-        lista.inserir(int(ratings[i]['rating'] * 100))
+    for valor in dados:
+        lista.inserir(valor)
     
     inicio = time.time()
     lista.heap_sort()
     fim = time.time()
     
-    tempo_ms = (fim - inicio) * 1000
-    print(f"Lista (vetor)   {size:6d} elementos: {tempo_ms:8.3f} ms")
+    tempo_s = fim - inicio
+    print(f"Lista (vetor)   {len(dados):6} elementos: {tempo_s:.6f} s")
 
 def main():
-    print("=== Benchmark Heap Sort ===")
-    ratings = carregar_ratings("ratings.csv")
-    tamanhos = [100, 1000, 10000, 100000, 1000000]
+    tamanhos = [100, 1000, 10000, 100000]
+    print("=== Benchmark Heap Sort (tempos em segundos) ===")
     
     for tamanho in tamanhos:
+        dados = gerar_dados_aleatorios(tamanho)
         print(f"\nTestando com {tamanho} elementos:")
         
-        testar_heap_sort_fila_ponteiro(ratings, tamanho)
-        testar_heap_sort_fila_vetor(ratings, tamanho)
+        testar_heap_sort_fila_ponteiro(dados.copy())
+        testar_heap_sort_fila_vetor(dados.copy())
         
-        testar_heap_sort_pilha_ponteiro(ratings, tamanho)
-        testar_heap_sort_pilha_vetor(ratings, tamanho)
+        testar_heap_sort_pilha_ponteiro(dados.copy())
+        testar_heap_sort_pilha_vetor(dados.copy())
         
-        testar_heap_sort_lista_ponteiro(ratings, tamanho)
-        testar_heap_sort_lista_vetor(ratings, tamanho)
+        testar_heap_sort_lista_ponteiro(dados.copy())
+        testar_heap_sort_lista_vetor(dados.copy())
 
 if __name__ == "__main__":
     main()
