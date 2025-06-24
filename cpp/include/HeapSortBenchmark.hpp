@@ -13,9 +13,9 @@ struct Rating {
 
 class HeapSortBenchmark {
 private:
-    static const int MAX_ENTRIES = 100000;
+    static const int MAX_ENTRIES = 1000000;
     std::vector<Rating> ratings;
-    const std::vector<int> sizes = {100, 1000, 10000,100000};
+    const std::vector<int> sizes = {100, 1000, 10000,100000,1000000};
     
     void loadRatings(const std::string& filename);
     void testFilaPonteiro(int size);

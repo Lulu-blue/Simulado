@@ -86,7 +86,7 @@ void HeapSortBenchmark::testFilaPonteiro(int size) {
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
     std::cout << "Fila (ponteiro) " << size << " elementos: " 
-              << std::fixed << std::setprecision(6) << tempo_seg << " s\n";
+              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
 }
 
 void HeapSortBenchmark::testFilaVetor(int size) {
@@ -101,7 +101,7 @@ void HeapSortBenchmark::testFilaVetor(int size) {
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
     std::cout << "Fila (vetor)    " << size << " elementos: " 
-              << std::fixed << std::setprecision(6) << tempo_seg << " s\n";
+              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
 }
 
 void HeapSortBenchmark::testPilhaPonteiro(int size) {
@@ -116,7 +116,7 @@ void HeapSortBenchmark::testPilhaPonteiro(int size) {
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
     std::cout << "Pilha (ponteiro)" << size << " elementos: " 
-              << std::fixed << std::setprecision(6) << tempo_seg << " s\n";
+              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
 }
 
 void HeapSortBenchmark::testPilhaVetor(int size) {
@@ -131,7 +131,7 @@ void HeapSortBenchmark::testPilhaVetor(int size) {
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
     std::cout << "Pilha (vetor)   " << size << " elementos: " 
-              << std::fixed << std::setprecision(6) << tempo_seg << " s\n";
+              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
 }
 
 void HeapSortBenchmark::testListaPonteiro(int size) {
@@ -146,7 +146,7 @@ void HeapSortBenchmark::testListaPonteiro(int size) {
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
     std::cout << "Lista (ponteiro)" << size << " elementos: " 
-              << std::fixed << std::setprecision(6) << tempo_seg << " s\n";
+              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
 }
 
 void HeapSortBenchmark::testListaVetor(int size) {
@@ -161,5 +161,5 @@ void HeapSortBenchmark::testListaVetor(int size) {
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
     std::cout << "Lista (vetor)   " << size << " elementos: " 
-              << std::fixed << std::setprecision(6) << tempo_seg << " s\n";
+              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
 }

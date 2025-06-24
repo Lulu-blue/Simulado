@@ -1,5 +1,5 @@
 public class FilaVetor {
-    private static final int MAX = 100000;
+    private static final int MAX = 1000000;
     private int[] dados;
     private int inicio;
     private int fim;
@@ -50,13 +50,11 @@ public class FilaVetor {
         for (int i = 0; i < n; i++) {
             temp[i] = desenfileirar();
         }
-        
-        // Build heap
+
         for (int i = n / 2 - 1; i >= 0; i--) {
             heapify(temp, n, i);
         }
-        
-        // Extract elements from heap
+
         for (int i = n - 1; i > 0; i--) {
             int swap = temp[0];
             temp[0] = temp[i];

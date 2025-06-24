@@ -1,5 +1,5 @@
 public class ListaVetor {
-    private static final int MAX = 100000;
+    private static final int MAX = 1000000;
     private int[] dados;
     private int tamanho;
     
@@ -18,13 +18,11 @@ public class ListaVetor {
     
     public void heapSort() {
         if (tamanho <= 1) return;
-        
-        // Build heap
+
         for (int i = tamanho / 2 - 1; i >= 0; i--) {
             heapify(dados, tamanho, i);
         }
-        
-        // Extract elements from heap
+
         for (int i = tamanho - 1; i > 0; i--) {
             int swap = dados[0];
             dados[0] = dados[i];

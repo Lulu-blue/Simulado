@@ -34,13 +34,11 @@ public class ListaPonteiro {
             temp[i] = atual.valor;
             atual = atual.prox;
         }
-        
-        // Build heap
+
         for (int i = tamanho / 2 - 1; i >= 0; i--) {
             heapify(temp, tamanho, i);
         }
-        
-        // Extract elements from heap
+
         for (int i = tamanho - 1; i > 0; i--) {
             int swap = temp[0];
             temp[0] = temp[i];

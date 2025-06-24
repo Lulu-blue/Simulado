@@ -27,7 +27,7 @@ type PilhaPonteiro a = [a]
 type PilhaVetor a = V.Vector a
 
 maxSize :: Int
-maxSize = 100000
+maxSize = 1000000  -- Aumentado para 1.000.000
 
 -- Operações básicas para FilaPonteiro
 enfileirarP :: a -> FilaPonteiro a -> FilaPonteiro a
@@ -64,6 +64,10 @@ lerRatings caminho = do
             let ratings = [read (ratingStr) :: Double | (_:ratingStr:_) <- csv]
             return ratings
 
+-- Gerar dados aleatórios se o arquivo não tiver 1.000.000 elementos
+gerarDadosAleatorios :: Int -> IO [Double]
+gerarDadosAleatorios n = sequence $ replicate n (randomRIO (0, 5) :: IO Double)
+
 -- Funções para testar o desempenho
 testarHeapSort :: String -> ([Double] -> [Double]) -> [Double] -> IO ()
 testarHeapSort nome funcao dados = do
@@ -83,11 +87,18 @@ main = do
     putStrLn $ "Lendo dados de: " ++ caminhoCSV
     ratings <- lerRatings caminhoCSV
     
-    let tamanhos = [100, 1000, 10000, min 100000 (length ratings)]
+    -- Verifica se temos dados suficientes ou gera aleatórios
+    dadosCompletos <- if length ratings >= 1000000
+                      then return (take 1000000 ratings)
+                      else do
+                          putStrLn "Arquivo não tem 1.000.000 elementos, gerando dados aleatórios..."
+                          gerarDadosAleatorios 1000000
+    
+    let tamanhos = [100, 1000, 10000, 100000, 1000000]  -- Adicionado 1.000.000
     putStrLn "=== Benchmark Heap Sort (tempos em segundos) ==="
     
     mapM_ (\tamanho -> do
-        let dados = take tamanho ratings
+        let dados = take tamanho dadosCompletos
         putStrLn $ "\nTestando com " ++ show tamanho ++ " elementos:"
         
         -- Testar com listas padrão (equivalente a vetor)
@@ -102,7 +113,7 @@ main = do
         putStrLn $ "Fila (ponteiro) " ++ show tamanho ++ " elementos: " ++ show tempo ++ "s"
         
         -- Testar com pilha baseada em lista
-        let pilhaP = foldr (:) [] dados
+        let pilhaP = dados  -- Para pilha, a ordem já está correta
         inicioP <- getCurrentTime
         let resultadoPilha = heapSort pilhaP
         fimP <- getCurrentTime

@@ -4,7 +4,7 @@
 
 void executar_benchmark() {
     Rating ratings[MAX_ENTRIES];
-    int tamanhos[] = {100, 1000, 10000, 100000};
+    int tamanhos[] = {100, 1000, 10000, 100000, 1000000};
     int num_tamanhos = sizeof(tamanhos) / sizeof(tamanhos[0]);
 
     printf("=== Benchmark Heap Sort ===\n");
@@ -16,7 +16,7 @@ void executar_benchmark() {
         clock_t inicio, fim;
         double tempo;
 
-        if (tamanhos[i] <= 100000) {
+        if (tamanhos[i] <= 1000000) {
             inicio = clock();
             testar_heap_sort_fila_ponteiro(ratings, tamanhos[i]);
             fim = clock();

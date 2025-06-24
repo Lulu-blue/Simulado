@@ -3,7 +3,7 @@
 
 class ListaVetor {
 private:
-    static const int MAX = 100000;
+    static const int MAX = 1000000;
     int dados[MAX];
     int tamanho;
     

@@ -56,7 +56,7 @@ class FilaPonteiro:
             self.enfileirar(valor)
 
 class FilaVetor:
-    MAX = 100000
+    MAX = 1000000
     
     def __init__(self):
         self.dados = [0] * self.MAX
@@ -140,7 +140,7 @@ class ListaPonteiro:
             atual = atual.prox
 
 class ListaVetor:
-    MAX = 100000
+    MAX = 1000000
     
     def __init__(self):
         self.dados = []
@@ -208,7 +208,7 @@ class PilhaPonteiro:
             self.empilhar(valor)
 
 class PilhaVetor:
-    MAX = 100000
+    MAX = 1000000
     
     def __init__(self):
         self.dados = []
@@ -245,7 +245,7 @@ class PilhaVetor:
         self.dados = temp
 
 def gerar_dados_aleatorios(tamanho):
-    return [random.randint(1, 100000) for _ in range(tamanho)]
+    return [random.randint(1, 1000000) for _ in range(tamanho)]
 
 def testar_heap_sort_fila_ponteiro(dados):
     fila = FilaPonteiro()
@@ -257,7 +257,7 @@ def testar_heap_sort_fila_ponteiro(dados):
     fim = time.time()
     
     tempo_s = fim - inicio
-    print(f"Fila (ponteiro) {len(dados):6} elementos: {tempo_s:.6f} s")
+    print(f"Fila (ponteiro) {len(dados):5} elementos: {tempo_s:.5f} s")
 
 def testar_heap_sort_fila_vetor(dados):
     fila = FilaVetor()
@@ -269,7 +269,7 @@ def testar_heap_sort_fila_vetor(dados):
     fim = time.time()
     
     tempo_s = fim - inicio
-    print(f"Fila (vetor)    {len(dados):6} elementos: {tempo_s:.6f} s")
+    print(f"Fila (vetor)    {len(dados):5} elementos: {tempo_s:.5f} s")
 
 def testar_heap_sort_pilha_ponteiro(dados):
     pilha = PilhaPonteiro()
@@ -281,7 +281,7 @@ def testar_heap_sort_pilha_ponteiro(dados):
     fim = time.time()
     
     tempo_s = fim - inicio
-    print(f"Pilha (ponteiro){len(dados):6} elementos: {tempo_s:.6f} s")
+    print(f"Pilha (ponteiro){len(dados):5} elementos: {tempo_s:.5f} s")
 
 def testar_heap_sort_pilha_vetor(dados):
     pilha = PilhaVetor()
@@ -293,7 +293,7 @@ def testar_heap_sort_pilha_vetor(dados):
     fim = time.time()
     
     tempo_s = fim - inicio
-    print(f"Pilha (vetor)   {len(dados):6} elementos: {tempo_s:.6f} s")
+    print(f"Pilha (vetor)   {len(dados):5} elementos: {tempo_s:.5f} s")
 
 def testar_heap_sort_lista_ponteiro(dados):
     lista = ListaPonteiro()
@@ -305,7 +305,7 @@ def testar_heap_sort_lista_ponteiro(dados):
     fim = time.time()
     
     tempo_s = fim - inicio
-    print(f"Lista (ponteiro){len(dados):6} elementos: {tempo_s:.6f} s")
+    print(f"Lista (ponteiro){len(dados):5} elementos: {tempo_s:.5f} s")
 
 def testar_heap_sort_lista_vetor(dados):
     lista = ListaVetor()
@@ -317,10 +317,10 @@ def testar_heap_sort_lista_vetor(dados):
     fim = time.time()
     
     tempo_s = fim - inicio
-    print(f"Lista (vetor)   {len(dados):6} elementos: {tempo_s:.6f} s")
+    print(f"Lista (vetor)   {len(dados):5} elementos: {tempo_s:.5f} s")
 
 def main():
-    tamanhos = [100, 1000, 10000, 100000]
+    tamanhos = [100, 1000, 10000, 100000, 1000000]
     print("=== Benchmark Heap Sort (tempos em segundos) ===")
     
     for tamanho in tamanhos:

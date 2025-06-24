@@ -100,7 +100,7 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    int tamanhos[] = {100, 1000, 10000, 100000};
+    int tamanhos[] = {100, 1000, 10000, 100000, 1000000};
     int num_tamanhos = sizeof(tamanhos) / sizeof(tamanhos[0]);
 
     printf("=== Benchmark Heap Sort ===\n");
@@ -112,7 +112,7 @@ int main() {
         clock_t inicio, fim;
         double tempo;
 
-        if (tamanhos[i] <= 100000)
+        if (tamanhos[i] <= 1000000)
         {
             inicio = clock();
             testar_heap_sort_fila_ponteiro(ratings, tamanhos[i]);

@@ -1,5 +1,5 @@
 public class PilhaVetor {
-    private static final int MAX = 100000;
+    private static final int MAX = 1000000;
     private int[] dados;
     private int topo;
     
@@ -36,13 +36,11 @@ public class PilhaVetor {
         if (topo + 1 <= 1) return;
         
         int n = topo + 1;
-        
-        // Build heap
+
         for (int i = n / 2 - 1; i >= 0; i--) {
             heapify(dados, n, i);
         }
-        
-        // Extract elements from heap
+
         for (int i = n - 1; i > 0; i--) {
             int swap = dados[0];
             dados[0] = dados[i];

@@ -1,7 +1,7 @@
 #ifndef FILA_VETOR_H
 #define FILA_VETOR_H
 
-#define MAX 100000
+#define MAX 1000000
 
 typedef struct
 {
