@@ -12,9 +12,37 @@
 #include <vector>
 #include <stdexcept>
 #include <iomanip>
+#include <cstdint>
+
+#ifdef __linux__
+#include <sys/resource.h>
+#elif _WIN32
+#include <windows.h>
+#include <psapi.h>
+#endif
 
 HeapSortBenchmark::HeapSortBenchmark() {
     loadRatings("ratings.csv");
+}
+
+uint64_t HeapSortBenchmark::getMemoryUsageBytes() {
+#ifdef __linux__
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);
+    return static_cast<uint64_t>(usage.ru_maxrss) * 1024; // Convert KB to bytes
+#elif _WIN32
+    PROCESS_MEMORY_COUNTERS pmc;
+    GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+    return pmc.WorkingSetSize; // Already in bytes
+#else
+    return 0; // Not supported
+#endif
+}
+
+void HeapSortBenchmark::printResults(const std::string& structureName, double time, double memoryUsedKB) {
+    std::cout << structureName << " | Tempo: " 
+              << std::fixed << std::setprecision(5) << time << " s"
+              << " | Memória: " << std::fixed << std::setprecision(2) << memoryUsedKB << " KB\n";
 }
 
 void HeapSortBenchmark::loadRatings(const std::string& filename) {
@@ -61,9 +89,12 @@ void HeapSortBenchmark::loadRatings(const std::string& filename) {
 
 void HeapSortBenchmark::run() {
     std::cout << "=== Benchmark Heap Sort ===\n";
+    std::cout << "Estrutura         | Tempo (segundos) | Memória (KB)\n";
+    std::cout << "--------------------------------------------------\n";
     
     for (int size : sizes) {
-        std::cout << "\nTestando com " << size << " elementos:\n";
+        std::cout << "\nTamanho: " << size << " elementos\n";
+        std::cout << "--------------------------------------------------\n";
         
         testFilaPonteiro(size);
         testFilaVetor(size);
@@ -75,6 +106,7 @@ void HeapSortBenchmark::run() {
 }
 
 void HeapSortBenchmark::testFilaPonteiro(int size) {
+    uint64_t beforeMem = getMemoryUsageBytes();
     FilaPonteiro fila;
     for (int i = 0; i < size; i++) {
         fila.enfileirar(static_cast<int>(ratings[i].rating * 100));
@@ -83,13 +115,15 @@ void HeapSortBenchmark::testFilaPonteiro(int size) {
     clock_t inicio = clock();
     fila.heapSort();
     clock_t fim = clock();
+    uint64_t afterMem = getMemoryUsageBytes();
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
-    std::cout << "Fila (ponteiro) " << size << " elementos: " 
-              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
+    double memoryKB = static_cast<double>(afterMem - beforeMem) / 1024.0;
+    printResults("Fila (Ponteiro)  ", tempo_seg, memoryKB);
 }
 
 void HeapSortBenchmark::testFilaVetor(int size) {
+    uint64_t beforeMem = getMemoryUsageBytes();
     FilaVetor fila;
     for (int i = 0; i < size; i++) {
         fila.enfileirar(static_cast<int>(ratings[i].rating * 100));
@@ -98,13 +132,15 @@ void HeapSortBenchmark::testFilaVetor(int size) {
     clock_t inicio = clock();
     fila.heapSort();
     clock_t fim = clock();
+    uint64_t afterMem = getMemoryUsageBytes();
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
-    std::cout << "Fila (vetor)    " << size << " elementos: " 
-              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
+    double memoryKB = static_cast<double>(afterMem - beforeMem) / 1024.0;
+    printResults("Fila (Vetor)     ", tempo_seg, memoryKB);
 }
 
 void HeapSortBenchmark::testPilhaPonteiro(int size) {
+    uint64_t beforeMem = getMemoryUsageBytes();
     PilhaPonteiro pilha;
     for (int i = 0; i < size; i++) {
         pilha.empilhar(static_cast<int>(ratings[i].rating * 100));
@@ -113,13 +149,15 @@ void HeapSortBenchmark::testPilhaPonteiro(int size) {
     clock_t inicio = clock();
     pilha.heapSort();
     clock_t fim = clock();
+    uint64_t afterMem = getMemoryUsageBytes();
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
-    std::cout << "Pilha (ponteiro)" << size << " elementos: " 
-              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
+    double memoryKB = static_cast<double>(afterMem - beforeMem) / 1024.0;
+    printResults("Pilha (Ponteiro) ", tempo_seg, memoryKB);
 }
 
 void HeapSortBenchmark::testPilhaVetor(int size) {
+    uint64_t beforeMem = getMemoryUsageBytes();
     PilhaVetor pilha;
     for (int i = 0; i < size; i++) {
         pilha.empilhar(static_cast<int>(ratings[i].rating * 100));
@@ -128,13 +166,15 @@ void HeapSortBenchmark::testPilhaVetor(int size) {
     clock_t inicio = clock();
     pilha.heapSort();
     clock_t fim = clock();
+    uint64_t afterMem = getMemoryUsageBytes();
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
-    std::cout << "Pilha (vetor)   " << size << " elementos: " 
-              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
+    double memoryKB = static_cast<double>(afterMem - beforeMem) / 1024.0;
+    printResults("Pilha (Vetor)    ", tempo_seg, memoryKB);
 }
 
 void HeapSortBenchmark::testListaPonteiro(int size) {
+    uint64_t beforeMem = getMemoryUsageBytes();
     ListaPonteiro lista;
     for (int i = 0; i < size; i++) {
         lista.inserir(static_cast<int>(ratings[i].rating * 100));
@@ -143,13 +183,15 @@ void HeapSortBenchmark::testListaPonteiro(int size) {
     clock_t inicio = clock();
     lista.heapSort();
     clock_t fim = clock();
+    uint64_t afterMem = getMemoryUsageBytes();
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
-    std::cout << "Lista (ponteiro)" << size << " elementos: " 
-              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
+    double memoryKB = static_cast<double>(afterMem - beforeMem) / 1024.0;
+    printResults("Lista (Ponteiro) ", tempo_seg, memoryKB);
 }
 
 void HeapSortBenchmark::testListaVetor(int size) {
+    uint64_t beforeMem = getMemoryUsageBytes();
     ListaVetor lista;
     for (int i = 0; i < size; i++) {
         lista.inserir(static_cast<int>(ratings[i].rating * 100));
@@ -158,8 +200,9 @@ void HeapSortBenchmark::testListaVetor(int size) {
     clock_t inicio = clock();
     lista.heapSort();
     clock_t fim = clock();
+    uint64_t afterMem = getMemoryUsageBytes();
 
     double tempo_seg = static_cast<double>(fim - inicio) / CLOCKS_PER_SEC;
-    std::cout << "Lista (vetor)   " << size << " elementos: " 
-              << std::fixed << std::setprecision(5) << tempo_seg << " s\n";
+    double memoryKB = static_cast<double>(afterMem - beforeMem) / 1024.0;
+    printResults("Lista (Vetor)    ", tempo_seg, memoryKB);
 }

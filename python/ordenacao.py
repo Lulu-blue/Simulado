@@ -1,6 +1,8 @@
 import time
 import random
 import heapq
+import sys
+import resource
 
 class NoFila:
     def __init__(self, valor):
@@ -247,94 +249,59 @@ class PilhaVetor:
 def gerar_dados_aleatorios(tamanho):
     return [random.randint(1, 1000000) for _ in range(tamanho)]
 
-def testar_heap_sort_fila_ponteiro(dados):
-    fila = FilaPonteiro()
-    for valor in dados:
-        fila.enfileirar(valor)
-    
-    inicio = time.time()
-    fila.heap_sort()
-    fim = time.time()
-    
-    tempo_s = fim - inicio
-    print(f"Fila (ponteiro) {len(dados):5} elementos: {tempo_s:.5f} s")
+def get_memory_usage():
+    """Retorna o uso de memória em KB"""
+    if sys.platform == "linux":
+        return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
+    elif sys.platform == "win32":
+        import psutil
+        return psutil.Process().memory_info().rss / 1024
+    else:
+        return 0  # Não suportado
 
-def testar_heap_sort_fila_vetor(dados):
-    fila = FilaVetor()
-    for valor in dados:
-        fila.enfileirar(valor)
-    
-    inicio = time.time()
-    fila.heap_sort()
-    fim = time.time()
-    
-    tempo_s = fim - inicio
-    print(f"Fila (vetor)    {len(dados):5} elementos: {tempo_s:.5f} s")
+def print_results(structure_name, time_elapsed, mem_usage):
+    print(f"{structure_name:<15} | Tempo: {time_elapsed:.5f} s | Memória: {mem_usage:.2f} KB")
 
-def testar_heap_sort_pilha_ponteiro(dados):
-    pilha = PilhaPonteiro()
+def benchmark(structure_func, structure_name, dados):
+    mem_before = get_memory_usage()
+    start_time = time.time()
+    
+    structure = structure_func()
     for valor in dados:
-        pilha.empilhar(valor)
+        if hasattr(structure, 'enfileirar'):
+            structure.enfileirar(valor)
+        elif hasattr(structure, 'empilhar'):
+            structure.empilhar(valor)
+        elif hasattr(structure, 'inserir'):
+            structure.inserir(valor)
     
-    inicio = time.time()
-    pilha.heap_sort()
-    fim = time.time()
+    structure.heap_sort()
     
-    tempo_s = fim - inicio
-    print(f"Pilha (ponteiro){len(dados):5} elementos: {tempo_s:.5f} s")
-
-def testar_heap_sort_pilha_vetor(dados):
-    pilha = PilhaVetor()
-    for valor in dados:
-        pilha.empilhar(valor)
+    end_time = time.time()
+    mem_after = get_memory_usage()
     
-    inicio = time.time()
-    pilha.heap_sort()
-    fim = time.time()
+    time_elapsed = end_time - start_time
+    mem_used = mem_after - mem_before
     
-    tempo_s = fim - inicio
-    print(f"Pilha (vetor)   {len(dados):5} elementos: {tempo_s:.5f} s")
-
-def testar_heap_sort_lista_ponteiro(dados):
-    lista = ListaPonteiro()
-    for valor in dados:
-        lista.inserir(valor)
-    
-    inicio = time.time()
-    lista.heap_sort()
-    fim = time.time()
-    
-    tempo_s = fim - inicio
-    print(f"Lista (ponteiro){len(dados):5} elementos: {tempo_s:.5f} s")
-
-def testar_heap_sort_lista_vetor(dados):
-    lista = ListaVetor()
-    for valor in dados:
-        lista.inserir(valor)
-    
-    inicio = time.time()
-    lista.heap_sort()
-    fim = time.time()
-    
-    tempo_s = fim - inicio
-    print(f"Lista (vetor)   {len(dados):5} elementos: {tempo_s:.5f} s")
+    print_results(structure_name, time_elapsed, mem_used)
 
 def main():
     tamanhos = [100, 1000, 10000, 100000, 1000000]
-    print("=== Benchmark Heap Sort (tempos em segundos) ===")
+    print("=== Benchmark Heap Sort ===")
+    print("Estrutura        | Tempo (s)   | Memória (KB)")
+    print("---------------------------------------------")
     
     for tamanho in tamanhos:
         dados = gerar_dados_aleatorios(tamanho)
-        print(f"\nTestando com {tamanho} elementos:")
+        print(f"\nTamanho: {tamanho} elementos")
+        print("---------------------------------------------")
         
-        testar_heap_sort_fila_ponteiro(dados.copy())
-        testar_heap_sort_fila_vetor(dados.copy())
-        
-        testar_heap_sort_pilha_ponteiro(dados.copy())
-        testar_heap_sort_pilha_vetor(dados.copy())
-        
-        testar_heap_sort_lista_ponteiro(dados.copy())
-        testar_heap_sort_lista_vetor(dados.copy())
+        benchmark(FilaPonteiro, "Fila Ponteiro", dados.copy())
+        benchmark(FilaVetor, "Fila Vetor", dados.copy())
+        benchmark(PilhaPonteiro, "Pilha Ponteiro", dados.copy())
+        benchmark(PilhaVetor, "Pilha Vetor", dados.copy())
+        benchmark(ListaPonteiro, "Lista Ponteiro", dados.copy())
+        benchmark(ListaVetor, "Lista Vetor", dados.copy())
 
 if __name__ == "__main__":
     main()

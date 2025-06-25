@@ -1,4 +1,7 @@
 import java.util.Random;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,7 +10,8 @@ public class Main {
         
         for (int tamanho : tamanhos) {
             int[] dados = gerarDadosAleatorios(tamanho);
-            System.out.println("\nTestando com " + tamanho + " elementos:");
+            System.out.printf("\nTamanho: %d elementos\n", tamanho);
+            System.out.println("---------------------------------------------");
             
             testarHeapSortFilaPonteiro(dados.clone());
             testarHeapSortFilaVetor(dados.clone());
@@ -27,7 +31,20 @@ public class Main {
         return dados;
     }
     
+    private static long getUsedMemory() {
+        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapUsage = memoryBean.getHeapMemoryUsage();
+        return heapUsage.getUsed();
+    }
+    
+    private static void printResults(String structureName, double time, long memoryBytes) {
+        double memoryKB = memoryBytes / 1024.0;
+        System.out.printf("%-15s | Tempo: %.5f s | Memória: %.2f KB\n", 
+                         structureName, time, memoryKB);
+    }
+    
     private static void testarHeapSortFilaPonteiro(int[] dados) {
+        long memBefore = getUsedMemory();
         FilaPonteiro fila = new FilaPonteiro();
         for (int valor : dados) {
             fila.enfileirar(valor);
@@ -36,13 +53,15 @@ public class Main {
         long inicio = System.nanoTime();
         fila.heapSort();
         long fim = System.nanoTime();
+        long memAfter = getUsedMemory();
         
         double tempoSegundos = (fim - inicio) / 1e9;
-        System.out.printf("Fila (ponteiro) %5d elementos: %.5f s%n", dados.length, tempoSegundos);
+        printResults("Fila Ponteiro", tempoSegundos, memAfter - memBefore);
     }
     
     private static void testarHeapSortFilaVetor(int[] dados) {
-        FilaVetor fila = new FilaVetor();
+        long memBefore = getUsedMemory();
+        FilaVetor fila = new FilaVetor(dados.length);
         for (int valor : dados) {
             fila.enfileirar(valor);
         }
@@ -50,12 +69,14 @@ public class Main {
         long inicio = System.nanoTime();
         fila.heapSort();
         long fim = System.nanoTime();
+        long memAfter = getUsedMemory();
         
         double tempoSegundos = (fim - inicio) / 1e9;
-        System.out.printf("Fila (vetor)    %5d elementos: %.5f s%n", dados.length, tempoSegundos);
+        printResults("Fila Vetor", tempoSegundos, memAfter - memBefore);
     }
     
     private static void testarHeapSortPilhaPonteiro(int[] dados) {
+        long memBefore = getUsedMemory();
         PilhaPonteiro pilha = new PilhaPonteiro();
         for (int valor : dados) {
             pilha.empilhar(valor);
@@ -64,13 +85,15 @@ public class Main {
         long inicio = System.nanoTime();
         pilha.heapSort();
         long fim = System.nanoTime();
+        long memAfter = getUsedMemory();
         
         double tempoSegundos = (fim - inicio) / 1e9;
-        System.out.printf("Pilha (ponteiro)%5d elementos: %.5f s%n", dados.length, tempoSegundos);
+        printResults("Pilha Ponteiro", tempoSegundos, memAfter - memBefore);
     }
     
     private static void testarHeapSortPilhaVetor(int[] dados) {
-        PilhaVetor pilha = new PilhaVetor();
+        long memBefore = getUsedMemory();
+        PilhaVetor pilha = new PilhaVetor(dados.length);
         for (int valor : dados) {
             pilha.empilhar(valor);
         }
@@ -78,12 +101,14 @@ public class Main {
         long inicio = System.nanoTime();
         pilha.heapSort();
         long fim = System.nanoTime();
+        long memAfter = getUsedMemory();
         
         double tempoSegundos = (fim - inicio) / 1e9;
-        System.out.printf("Pilha (vetor)   %5d elementos: %.5f s%n", dados.length, tempoSegundos);
+        printResults("Pilha Vetor", tempoSegundos, memAfter - memBefore);
     }
     
     private static void testarHeapSortListaPonteiro(int[] dados) {
+        long memBefore = getUsedMemory();
         ListaPonteiro lista = new ListaPonteiro();
         for (int valor : dados) {
             lista.inserir(valor);
@@ -92,13 +117,15 @@ public class Main {
         long inicio = System.nanoTime();
         lista.heapSort();
         long fim = System.nanoTime();
+        long memAfter = getUsedMemory();
         
         double tempoSegundos = (fim - inicio) / 1e9;
-        System.out.printf("Lista (ponteiro)%5d elementos: %.5f s%n", dados.length, tempoSegundos);
+        printResults("Lista Ponteiro", tempoSegundos, memAfter - memBefore);
     }
     
     private static void testarHeapSortListaVetor(int[] dados) {
-        ListaVetor lista = new ListaVetor();
+        long memBefore = getUsedMemory();
+        ListaVetor lista = new ListaVetor(dados.length);
         for (int valor : dados) {
             lista.inserir(valor);
         }
@@ -106,8 +133,9 @@ public class Main {
         long inicio = System.nanoTime();
         lista.heapSort();
         long fim = System.nanoTime();
+        long memAfter = getUsedMemory();
         
         double tempoSegundos = (fim - inicio) / 1e9;
-        System.out.printf("Lista (vetor)   %5d elementos: %.5f s%n", dados.length, tempoSegundos);
+        printResults("Lista Vetor", tempoSegundos, memAfter - memBefore);
     }
 }

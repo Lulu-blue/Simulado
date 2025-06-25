@@ -1,9 +1,8 @@
-
 build:
 	stack build
 
 run:
-	stack exec heap-sort-benchmark -- ../data/ratings.csv
+	stack exec heapsort-exe -- ../data/ratings.csv
 
 clean:
 	stack clean

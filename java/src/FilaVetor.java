@@ -1,12 +1,11 @@
 public class FilaVetor {
-    private static final int MAX = 1000000;
     private int[] dados;
     private int inicio;
     private int fim;
     private int tamanho;
     
-    public FilaVetor() {
-        dados = new int[MAX];
+    public FilaVetor(int capacidade) {
+        dados = new int[capacidade];
         inicio = 0;
         fim = -1;
         tamanho = 0;
@@ -17,7 +16,7 @@ public class FilaVetor {
     }
     
     public boolean estaCheia() {
-        return tamanho == MAX;
+        return tamanho == dados.length;
     }
     
     public void enfileirar(int valor) {
@@ -25,7 +24,7 @@ public class FilaVetor {
             System.out.println("Fila cheia!");
             return;
         }
-        fim = (fim + 1) % MAX;
+        fim = (fim + 1) % dados.length;
         dados[fim] = valor;
         tamanho++;
     }
@@ -36,7 +35,7 @@ public class FilaVetor {
             return -1;
         }
         int valor = dados[inicio];
-        inicio = (inicio + 1) % MAX;
+        inicio = (inicio + 1) % dados.length;
         tamanho--;
         return valor;
     }

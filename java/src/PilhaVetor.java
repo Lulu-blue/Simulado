@@ -1,10 +1,9 @@
 public class PilhaVetor {
-    private static final int MAX = 1000000;
     private int[] dados;
     private int topo;
     
-    public PilhaVetor() {
-        dados = new int[MAX];
+    public PilhaVetor(int capacidade) {
+        dados = new int[capacidade];
         topo = -1;
     }
     
@@ -13,7 +12,7 @@ public class PilhaVetor {
     }
     
     public boolean estaCheia() {
-        return topo == MAX - 1;
+        return topo == dados.length - 1;
     }
     
     public void empilhar(int valor) {

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <cstdint> 
 
 struct Rating {
     int userId;
@@ -15,9 +16,11 @@ class HeapSortBenchmark {
 private:
     static const int MAX_ENTRIES = 1000000;
     std::vector<Rating> ratings;
-    const std::vector<int> sizes = {100, 1000, 10000,100000,1000000};
+    const std::vector<int> sizes = {100, 1000, 10000, 100000, 1000000};
     
     void loadRatings(const std::string& filename);
+    uint64_t getMemoryUsageBytes();
+    void printResults(const std::string& structureName, double time, double memoryUsedKB);  
     void testFilaPonteiro(int size);
     void testFilaVetor(int size);
     void testPilhaPonteiro(int size);
@@ -30,4 +33,4 @@ public:
     void run();
 };
 
-#endif 
+#endif

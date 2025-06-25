@@ -1,15 +1,14 @@
 public class ListaVetor {
-    private static final int MAX = 1000000;
     private int[] dados;
     private int tamanho;
     
-    public ListaVetor() {
-        dados = new int[MAX];
+    public ListaVetor(int capacidade) {
+        dados = new int[capacidade];
         tamanho = 0;
     }
     
     public void inserir(int valor) {
-        if (tamanho >= MAX) {
+        if (tamanho >= dados.length) {
             System.out.println("Lista cheia!");
             return;
         }
