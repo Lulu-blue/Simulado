@@ -1,0 +1,25 @@
+# Pastas que serão removidas e nunca mais adicionadas
+haskell/
+scripts/
+
+# Pastas que devem ser ignoradas LOCALMENTE (mas permanecem no GitHub)
+c/
+cpp/
+java/
+python/
+# Ignorar arquivos compilados e gerados comuns
+bin/
+build/
+target/
+*.o
+*.class
+*.exe
+*.dll
+*.jar
+*.war
+*.zip # Se você costuma ter zip de builds
+*.log
+*.db
+.env
+.vscode/ # Configurações da IDE
+.idea/   # Configurações da IDE
