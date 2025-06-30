@@ -119,7 +119,7 @@ Este `README` fornece um guia sobre como compilar os códigos de ordenação
     cd ruby/
     ```
 2.  **executar:**
-   # Executa diretamente o arquivo principal
+   ### Executa diretamente o arquivo principal
    
    ```bash
     ruby main.rb
